@@ -12,17 +12,7 @@
     },
     "files": [
         "README.md",
-        "main.py",
-        "tsconfig.json",
-        "test.ts",
-        "README.md",
-        ".vscode/settings.json",
-        ".vscode/tasks.json",
-        "main.blocks",
-        "main.ts",
-        "main.py",
-        ".simstate.json",
-        ".git.json"
+        "main.py"
     ],
     "testFiles": [
         "test.ts"
