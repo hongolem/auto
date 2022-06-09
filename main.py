@@ -32,6 +32,11 @@ def on_forever():
             motor_run(50, 50)
         elif (sensor_L != path) and (sensor_R != path):
             motor_stop()
+            motor_run(-50, 50)
+            basic.pause(300)
+            motor_run(50, -50)
+            basic.pause(600)
+            motor_stop()
         elif (sensor_L == path) and (sensor_R != path):
             motor_run(50, 0)
         elif (sensor_L != path) and (sensor_R == path):
