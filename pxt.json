@@ -14,9 +14,6 @@
         "README.md",
         "main.py"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
     "public": true,
     "targetVersions": {
         "target": "4.0.18",
