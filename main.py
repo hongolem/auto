@@ -44,3 +44,50 @@ def on_forever():
     elif switch == 1:
         pass
 forever(on_forever)     #autonomní mód
+
+#NEKOMPLETNÍ ČÁST!!!ZÁKAZ VSTUPU
+
+def on_bluetooth_connected():
+    global connected, switch
+    basic.show_icon(IconNames.HEART)
+    connected = 1
+    while connected == 1:
+        uartData = bluetooth.uart_read_until(serial.delimiters(Delimiters.HASH))
+        console.log_value("data", uartData)
+        if uartData == "M":
+            switch == 1
+        if uartData == "L":
+            switch == 0
+        if uartData == "0":
+            motor_run(0, 0)
+        elif uartData == "A":
+            motor_run(50, 50)
+        elif uartData == "B":
+            motor_run(-50, -50)
+        elif uartData == "C":
+            motor_run(-50, 50)
+        elif uartData == "D":
+            motor_run(50, -50)
+        elif uartData == "G":
+            motor_run(-50, 50)
+            basic.pause(870)
+            motor_stop()
+        elif uartData == "H":
+            sensor_L = pins.digital_read_pin(pin_L)
+            sensor_R = pins.digital_read_pin(pin_R)
+            motor_run(-50, 50)
+            basic.pause(400)
+            motor_stop()
+            while (sensor_L != path) and (sensor_R != path):
+                motor_run(-50, 50)
+                if (sensor_L == path) or (sensor_R == path):
+                    motor_stop()
+                    break
+bluetooth.on_bluetooth_connected(on_bluetooth_connected)                    #bluetooth mód
+
+def on_bluetooth_disconnected():
+    global connected
+    basic.show_icon(IconNames.SAD)
+    connected = 0
+bluetooth.on_bluetooth_disconnected(on_bluetooth_disconnected)
+bluetooth.uart_write_number(0)
