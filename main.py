@@ -6,9 +6,7 @@ pin_Echo = DigitalPin.P15   #piny (+speedfactor)
 
 path = 1
 connected = 0
-switch = 0
-halt = True
-whileswitch = 0         #switch variables
+switch = 0        #switch variables
 
 strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
 pins.set_pull(pin_L, PinPullMode.PULL_NONE)
