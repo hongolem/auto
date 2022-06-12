@@ -13,12 +13,12 @@ Je vhodné si pomoci zasíláním "instrukcí" prostřednictvím aplikace [**Mbi
 
 - [x] autonomní jízda po bílé / černé čáře bez nutných zásahů do řízení
 - [x] překonání křižovatek ve tvaru písmene **+**
-- [ ] schopnost na "vyžádání" odbočit na křižovatce vlevo nebo vpravo
+- [x] schopnost na "vyžádání" odbočit na křižovatce vlevo nebo vpravo
 - [x] možnost obrátit se do protisměru
 
 ### Volitelně (bonusové hodnocení)
 
-- [ ] schopnost najet do křižovatky jiného tvaru než **+**, typicky **Y**
+- [x] schopnost najet do křižovatky jiného tvaru než **+**, typicky **Y**
 - [ ] čára končící u mechanické překážky = otočení se do protisměru
 - [ ] čára končící mechanickou překážkou = pokus o objetí a pokračování v autonomní jízdě
 (překážka nebude nikdy větší jak 20 × 20 × 20 cm)

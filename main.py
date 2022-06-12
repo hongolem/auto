@@ -31,7 +31,8 @@ def on_forever():
         sensor_R = pins.digital_read_pin(pin_R)
         obstacle_distance = sonar.ping(pin_Trig, pin_Echo, PingUnit.CENTIMETERS)
         if (sensor_L == path) and (sensor_R == path):
-            motor_run(50, 50)
+            motor_stop()
+            counting = 0
         elif (sensor_L != path) and (sensor_R != path):
             motor_stop()
             if counting >= 10:
@@ -48,13 +49,13 @@ def on_forever():
                 basic.pause(100)
         elif (sensor_L == path) and (sensor_R != path):
             motor_run(50, 0)
+            counting = 0
         elif (sensor_L != path) and (sensor_R == path):
             motor_run(0, 50)
+            counting = 0
     elif switch == 1:
         pass
 forever(on_forever)     #autonomní mód
-
-#NEKOMPLETNÍ ČÁST!!!ZÁKAZ VSTUPU
 
 def on_bluetooth_connected():
     global connected, switch, path, speedFactor
@@ -68,12 +69,20 @@ def on_bluetooth_connected():
             pass
         elif uartData == "A":
             motor_run(50, 50)
+            basic.pause(300)
+            motor_stop()
         elif uartData == "B":
             motor_run(-50, -50)
+            basic.pause(300)
+            motor_stop()
         elif uartData == "C":
-            motor_run(50, 0)
+            motor_run(50, -50)
+            basic.pause(300)
+            motor_stop()
         elif uartData == "D":
-            motor_run(0, 50)
+            motor_run(-50, 50)
+            basic.pause(300)
+            motor_stop()
         elif uartData == "E":
             speedFactor = speedFactor - 5
         elif uartData == "F":
@@ -88,7 +97,10 @@ def on_bluetooth_connected():
             basic.pause(870)
             motor_stop()
         elif uartData == "I":
-            pass
+            if switch == 0:
+                switch = 1
+            elif switch == 1:
+                switch = 0
         elif uartData == "J":
             pass
         elif uartData == "K":
