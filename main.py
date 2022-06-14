@@ -5,8 +5,9 @@ pin_Echo = DigitalPin.P15   #piny
 
 path = 1
 connected = 0
-switch = 0
+modeSwitch = 0
 crossroadSwitch = 0
+ultrasonicSwitch = 0
 counting = 0
 speedFactor = 80    #switchable variables
 
@@ -25,7 +26,7 @@ def motor_stop():
 
 def on_forever():
     global counting
-    if switch == 0:
+    if modeSwitch == 0:
         sensor_L = pins.digital_read_pin(pin_L)
         sensor_R = pins.digital_read_pin(pin_R)
         obstacle_distance = sonar.ping(pin_Trig, pin_Echo, PingUnit.CENTIMETERS)
@@ -56,12 +57,21 @@ def on_forever():
         elif (sensor_L != path) and (sensor_R == path):
             motor_run(0, 50)
             counting = 0                #jede vpravo
-    elif switch == 1:
+
+        if obstacle_distance < 10:
+            if ultrasonicSwitch == 0:
+                motor_stop()
+                motor_run (50, -50, 80)
+                basic.pause(870)
+                motor_stop()
+            elif ultrasonicSwitch == 1:
+                pass
+    elif modeSwitch == 1:
         pass                        #zapnuto manuální řízení
 forever(on_forever)                                             #autonomní mód
 
 def on_bluetooth_connected():
-    global connected, switch, path, crossroadSwitch
+    global connected, modeSwitch, path, crossroadSwitch, ultrasonicSwitch
     basic.show_icon(IconNames.HEART)
     connected = 1
     while connected == 1:
@@ -99,14 +109,19 @@ def on_bluetooth_connected():
             elif crossroadSwitch == 1:
                 crossroadSwitch = 0         #přepínání z automatic voliče cesty na manuál
         elif uartData == "I":
-            if switch == 0:
-                switch = 1
-            elif switch == 1:
-                switch = 0                  #manuální/automatické řízení
+            if modeSwitch == 0:
+                modeSwitch = 1
+            elif modeSwitch == 1:
+                modeSwitch = 0                  #manuální/automatické řízení
         elif uartData == "J":
             motor_run (50, -50, 80)
             basic.pause(870)
             motor_stop()                        #180° otočka
+        elif uartData == "K":
+            if ultrasonicSwitch == 0:
+                ultrasonicSwitch = 1
+            elif ultrasonicSwitch == 1:
+                ultrasonicSwitch = 0
         elif uartData == "0":
             pass
 bluetooth.on_bluetooth_connected(on_bluetooth_connected)                    #bluetooth mód

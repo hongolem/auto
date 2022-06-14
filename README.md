@@ -19,7 +19,7 @@ Je vhodné si pomoci zasíláním "instrukcí" prostřednictvím aplikace [**Mbi
 ### Volitelně (bonusové hodnocení)
 
 - [x] schopnost najet do křižovatky jiného tvaru než **+**, typicky **Y**
-- [ ] čára končící u mechanické překážky = otočení se do protisměru
+- [?] čára končící u mechanické překážky = otočení se do protisměru
 - [ ] čára končící mechanickou překážkou = pokus o objetí a pokračování v autonomní jízdě
 (překážka nebude nikdy větší jak 20 × 20 × 20 cm)
 
