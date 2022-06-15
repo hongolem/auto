@@ -33,10 +33,9 @@ def on_forever():
         if (sensor_L == path) and (sensor_R == path):
             if crossroadSwitch == 0:
                 motor_run(50, 50)
-                counting = 0
             elif crossroadSwitch == 1:
                 motor_stop()
-                counting = 0
+            counting = 0                                    #jede automaticky když je na křižovatce/čeká na povely
         elif (sensor_L != path) and (sensor_R != path):
             motor_stop()
             if counting >= 10:
@@ -50,16 +49,16 @@ def on_forever():
                 motor_run(-50, 50)
                 basic.pause(150)
                 motor_run(50, -50)
-                basic.pause(110)                #když nevidí cestu začne se mírně otáčet ze strany na stranu, ale když dlouho nic nenachází udělá 180
+                basic.pause(110)                            #když nevidí cestu začne se mírně otáčet ze strany na stranu, ale když dlouho nic nenachází udělá 180
         elif (sensor_L == path) and (sensor_R != path):
             motor_run(50, 0)
-            counting = 0                    #jede vlevo
+            counting = 0                                    #jede vlevo
         elif (sensor_L != path) and (sensor_R == path):
             motor_run(0, 50)
-            counting = 0                    #jede vpravo
+            counting = 0                                    #jede vpravo
     elif modeSwitch == 1:
-        pass                                #zapnuto manuální řízení
-forever(on_forever)                                             #autonomní mód
+        pass                                                #zapnuto manuální řízení
+forever(on_forever)                                                 #autonomní mód
 
 def onIn_background():
     global modeSwitch
@@ -73,7 +72,7 @@ def onIn_background():
                 motor_run (50, -50, 80)
                 basic.pause(870)
                 motor_stop()
-                modeSwitch = 0
+                modeSwitch = 0                  #funkce otočí se od překážky
             elif ultrasonicSwitch == 1:
                 modeSwitch = 1
                 pause(200)
@@ -102,11 +101,11 @@ def onIn_background():
                 basic.pause(500)
                 motor_run(50, 50)
                 basic.pause(1900)
-                modeSwitch = 0
+                modeSwitch = 0                  #funkce objede překážku
     elif ultrasonicON_OFF == 1:
-        pass
+        pass                                    #funkce je vyplá
     control.in_background(onIn_background)
-control.in_background(onIn_background)
+control.in_background(onIn_background)              #ultrasonic funkce
 
 def on_bluetooth_connected():
     global connected, modeSwitch, path, crossroadSwitch, ultrasonicSwitch, ultrasonicON_OFF
@@ -119,38 +118,37 @@ def on_bluetooth_connected():
         if uartData == "A":
             motor_run(75, 75)
             basic.pause(500)
-            motor_stop()            #jízda rovně
+            motor_stop()                                                    #jízda rovně
         elif uartData == "B":
             motor_run(-75, -75)
             basic.pause(500)
-            motor_stop()            #jízda zpět
+            motor_stop()                                                    #jízda zpět
         elif uartData == "C":
             motor_run(50, -50)
             basic.pause(300)
-            motor_stop()            #jízda doleva
+            motor_stop()                                                    #jízda doleva
         elif uartData == "D":
             motor_run(-50, 50)
             basic.pause(300)
-            motor_stop()            #jízda doprava
+            motor_stop()                                                    #jízda doprava
         elif uartData == "G":
             path = 0 if (path == 1) else 1                                      #přepínání barvy cesty
         elif uartData == "H":
             crossroadSwitch = 0 if (crossroadSwitch == 1) else 1                #přepínání z automatic voliče cesty na manuál
         elif uartData == "I":
             modeSwitch = 0 if (modeSwitch == 1) else 1
-            if modeSwitch == 1:
-                motor_stop()                                                    #manuální/automatické řízení
+            motor_stop()                                                        #manuální/automatické řízení
         elif uartData == "J":
-            ultrasonicSwitch = 0 if (ultrasonicSwitch == 1) else 1                       #přepínání mezi: při mechanické překážce se otočí/objede
+            ultrasonicSwitch = 0 if (ultrasonicSwitch == 1) else 1              #přepínání mezi: při mechanické překážce se otočí/objede
         elif uartData == "K":
-            ultrasonicON_OFF = 0 if (ultrasonicON_OFF == 1) else 1
+            ultrasonicON_OFF = 0 if (ultrasonicON_OFF == 1) else 1              #vypnutí/zapnutí ultrasonic sensoru
         elif uartData == "L":
             motor_run (50, -50, 80)
             basic.pause(870)
             motor_stop()                                                        #180° otočka
         elif uartData == "0":
             pass
-bluetooth.on_bluetooth_connected(on_bluetooth_connected)                        #bluetooth mód
+bluetooth.on_bluetooth_connected(on_bluetooth_connected)                            #bluetooth mód
 
 def on_bluetooth_disconnected():
     global connected
@@ -161,3 +159,5 @@ bluetooth.uart_write_number(0)
 
 #praktické testování U.S.S.
 #+nemít zaplý automat po dokončení U.S.S (mby)
+#pause, motor_stop do motor_run
+#ultrasonic vypnut když jede manual
