@@ -62,7 +62,7 @@ def onIn_background():
     if (ultrasonicON_OFF == 1) and (modeSwitch == 0):
         basic.pause(500)
         obstacle_distance = sonar.ping(pin_Trig, pin_Echo, PingUnit.CENTIMETERS)
-        if obstacle_distance < 15:
+        if obstacle_distance < 25:
             modeSwitch = 1
             if ultrasonicSwitch == 0:
                 PCAmotor.motor_stop_all()
