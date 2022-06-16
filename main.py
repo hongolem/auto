@@ -10,6 +10,7 @@ modeSwitch = 0
 crossroadSwitch = 0
 ultrasonicSwitch = 0
 ultrasonicON_OFF = 1
+changableSpeed = 50
 speedFactor = 80    #switchable variables
 
 pins.set_pull(pin_L, PinPullMode.PULL_NONE)
@@ -40,7 +41,7 @@ def on_forever():
         elif (sensor_L != path) and (sensor_R != path):
             PCAmotor.motor_stop_all()
             if counting >= 10:
-                motor_run(-50, 50, 870, 1)
+                motor_run(-changableSpeed, changableSpeed, 870, 1)
                 counting = 0
             elif counting < 10:
                 counting = counting + 1
@@ -48,10 +49,10 @@ def on_forever():
                 motor_run(-50, 50, 150)
                 motor_run(50, -50, 110)                                             #když nevidí cestu začne se mírně otáčet ze strany na stranu, ale když dlouho nic nenachází udělá 180
         elif (sensor_L == path) and (sensor_R != path):
-            motor_run(50, 0)
+            motor_run(changableSpeed, 0)
             counting = 0                                                            #jede vlevo
         elif (sensor_L != path) and (sensor_R == path):
-            motor_run(0, 50)
+            motor_run(0, changableSpeed)
             counting = 0                                                            #jede vpravo
     elif modeSwitch == 1:
         pass                                                                        #zapnuto manuální řízení
@@ -91,7 +92,7 @@ def onIn_background():
 control.in_background(onIn_background)                                          #ultrasonic funkce
 
 def on_bluetooth_connected():
-    global connected, modeSwitch, path, crossroadSwitch, ultrasonicSwitch, ultrasonicON_OFF
+    global connected, modeSwitch, path, crossroadSwitch, ultrasonicSwitch, ultrasonicON_OFF, changableSpeed
     basic.show_icon(IconNames.HEART)
     connected = 1
     while connected == 1:
@@ -106,6 +107,10 @@ def on_bluetooth_connected():
             motor_run(50, -50, 300, 1)                                              #jízda doleva
         elif uartData == "D":
             motor_run(-50, 50, 300, 1)                                              #jízda doprava
+        elif uartData == "E":
+            changableSpeed = changableSpeed - 10
+        elif uartData == "F":
+            changableSpeed = changableSpeed + 10
         elif uartData == "G":
             path = 0 if (path == 1) else 1                                          #přepínání barvy cesty
         elif uartData == "H":
